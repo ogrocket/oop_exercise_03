@@ -1,120 +1,104 @@
 #include <iostream>
 #include <vector>
 
+#include "Point.hpp"
 #include "Triangle.hpp"
 #include "Square.hpp"
 #include "Rectangle.hpp"
 
-void PrintMenu();
+void PrintMenu(){
+    std::cout<< "What do you want to do?\n";
+    std::cout<< "0. Exit\n";
+    std::cout<< "1. Add triangle\n";
+    std::cout<< "2. Add square \n";
+    std::cout<< "3. Add rectangle\n";
+    std::cout<< "4. Print centers of figures \n";
+    std::cout<< "5. Print points of figures \n";
+    std::cout<< "6. Print area of figures \n";
+    std::cout<< "7. Sum all areas\n";
+    std::cout<< "8. Delete figure by index\n";
+    std::cout<< "> ";
+}
 
 int main(){
     std::vector<Figure *> figures;
-    int i, variant;
+    int index, variant;
+    PrintMenu();
+    double Area = 0;
 
-    do {
-        PrintMenu();
+    do{
         std::cin >> variant;
         switch(variant){
             case 1:{
-                auto *T = new Triangle;
+                auto T = new Triangle;
                 std::cout << "Input vertices in format 'x y': ";
                 std::cin >> *T;
-                std::cout << "Input index : ";
-                std::cin >> i;
-                if(i > figures.size()){
-                    figures.resize(i);
-                }
-                figures.insert(figures.begin() + i, T);
+                figures.push_back(T);
+                Area += figures.back()->Area();
                 break;
             }
             case 2:{
-                auto *S = new Square;
+                auto S = new Square;
                 std::cout << "Input vertices in format 'x y': ";
                 std::cin >> *S;
-                std::cout << "Input index : ";
-                std::cin >> i;
-                if(i > figures.size()){
-                    figures.resize(i);
-                }
-                figures.insert(figures.begin() + i, S);
+                figures.push_back(S);
+                Area += figures.back()->Area();
                 break;
             }
+
             case 3:{
-                auto *R = new Rectangle;
+                auto R = new Rectangle;
                 std::cout << "Input vertices in format 'x y': ";
                 std::cin >> *R;
-                std::cout << "Input index : ";
-                std::cin >> i;
-                if(i > figures.size()){
-                    figures.resize(i);
-                }
-                figures.insert(figures.begin() + i, R);
+                figures.push_back(R);
+                Area += figures.back()->Area();
                 break;
             }
+
             case 4:{
-                std::cout << "Input index : " ;
-                std::cin >> i;
-                if (figures.size() < i){
-                    std::cout << "There is no element with this index\n";
-                    break;
+                for (int i = 0; i < figures.size(); i++){
+                    std::cout << figures[i]->Center() << "\n";
                 }
-                std::cout << figures[i] -> Center() << "\n";
                 break;
             }
+
             case 5:{
-                std::cout << "Input index : " ;
-                std::cin >> i;
-                if (figures.size() < i){
-                    std::cout << "There is no element with this index\n";
-                    break;
+                for (int i = 0; i < figures.size(); i++){
+                    std::cout << *figures[i] << "\n";
                 }
-                std::cout << *figures[i] << "\n";
                 break;
             }
+
             case 6:{
-                std::cout << "Input index : " ;
-                std::cin >> i;
-                if (figures.size() < i){
-                    std::cout << "There is no element with this index\n";
-                    break;
+                for (int i = 0; i < figures.size(); i++){
+                    std::cout << figures[i]->Area() << "\n";
                 }
-                std::cout << figures[i] -> Area() << "\n";
                 break;
             }
+
             case 7:{
-                double areas = 0;
-                for (int i = 0; i < figures.size(); i++) {
-                    areas += figures[i] -> Area();
+                std::cout << Area << "\n";
+                break;
+            }
+
+            case 8:{
+                std::cout << "Input index\n";
+                std::cin >> index;
+                if (index > figures.size()){
+                    std::cout << "Out of range!\n";
                 }
-                std::cout << "Summ of all areas = " << areas << "\n";
+                else{
+                    Area -= figures[index]->Area();
+                    delete figures[index];
+                    figures.erase(figures.begin() + index);
+                }
                 break;
 
-            }
-            case 8:{
-                std::cout << "Input index : " ;
-                std::cin >> i;
-                if (figures.size() < i){
-                    std::cout << "There is no element with this index\n";
-                    break;
-                }
-                figures.erase(figures.begin() + i);
-                break;
             }
         }
 
     }while (variant != 0);
+
+    return 0;
 }
 
-void PrintMenu(){
-            std::cout<< "What do you want to do?\n";
-            std::cout<< "0. Exit\n";
-    		std::cout<< "1. Add triangle by index\n";
-    		std::cout<< "2. Add square by index\n";
-    		std::cout<< "3. Add rectangle by index\n";
-    		std::cout<< "4. Print center of figure by index\n";
-    		std::cout<< "5. Print points of figure by index\n";
-    		std::cout<< "6. Print area of figure by index\n";
-    		std::cout<< "7. Sum all areas\n";
-    		std::cout<< "8. Delete figure by index\n";
-    		std::cout<< "> ";
-}
